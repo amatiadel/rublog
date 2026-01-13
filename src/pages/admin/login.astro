@@ -1,0 +1,222 @@
+---
+export const prerender = false;
+
+import { verifyPassword, generateCsrfToken, verifyCsrfToken, SESSION_CONFIG } from '@/utils/auth';
+
+// Check if already logged in
+const sessionCookie = Astro.cookies.get(SESSION_CONFIG.cookieName);
+if (sessionCookie?.value && sessionCookie.value.startsWith('authenticated:')) {
+  // Проверяем срок действия сессии
+  const [, timestamp] = sessionCookie.value.split(':');
+  const sessionTime = parseInt(timestamp, 10);
+  const now = Date.now();
+  
+  if (now - sessionTime < SESSION_CONFIG.maxAge * 1000) {
+    return Astro.redirect('/admin');
+  }
+  // Сессия истекла - удаляем куку
+  Astro.cookies.delete(SESSION_CONFIG.cookieName, { path: '/' });
+}
+
+let error = '';
+let csrfToken = generateCsrfToken();
+
+// Handle login
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const password = formData.get('password') as string;
+  const formCsrfToken = formData.get('csrf_token') as string;
+  const cookieCsrfToken = Astro.cookies.get(SESSION_CONFIG.csrfCookieName)?.value;
+  
+  // Проверка CSRF токена
+  if (!verifyCsrfToken(formCsrfToken, cookieCsrfToken)) {
+    error = 'Ошибка безопасности. Обновите страницу и попробуйте снова.';
+  } else {
+    // Получаем хеш пароля из переменных окружения
+    // Для генерации хеша используйте: node -e "require('bcryptjs').hash('ваш_пароль', 12).then(console.log)"
+    const ADMIN_PASSWORD_HASH = import.meta.env.ADMIN_PASSWORD_HASH;
+    
+    // Fallback для обратной совместимости (НЕ ИСПОЛЬЗОВАТЬ В PRODUCTION!)
+    const ADMIN_PASSWORD_PLAIN = import.meta.env.ADMIN_PASSWORD;
+    
+    let isValid = false;
+    
+    if (ADMIN_PASSWORD_HASH) {
+      // Безопасная проверка через хеш
+      isValid = await verifyPassword(password, ADMIN_PASSWORD_HASH);
+    } else if (ADMIN_PASSWORD_PLAIN) {
+      // Fallback: простое сравнение (только для разработки!)
+      isValid = password === ADMIN_PASSWORD_PLAIN;
+      console.warn('⚠️ Используется небезопасное сравнение пароля! Добавьте ADMIN_PASSWORD_HASH в .env');
+    }
+    
+    if (isValid) {
+      // Создаём сессию с временной меткой
+      const sessionValue = `authenticated:${Date.now()}`;
+      
+      Astro.cookies.set(SESSION_CONFIG.cookieName, sessionValue, {
+        path: '/',
+        httpOnly: true,
+        secure: import.meta.env.PROD,
+        sameSite: 'strict',
+        maxAge: SESSION_CONFIG.maxAge
+      });
+      
+      // Удаляем CSRF токен после успешного входа
+      Astro.cookies.delete(SESSION_CONFIG.csrfCookieName, { path: '/' });
+      
+      return Astro.redirect('/admin');
+    } else {
+      error = 'Неверный пароль';
+    }
+  }
+  
+  // Генерируем новый CSRF токен после неудачной попытки
+  csrfToken = generateCsrfToken();
+}
+
+// Сохраняем CSRF токен в куку
+Astro.cookies.set(SESSION_CONFIG.csrfCookieName, csrfToken, {
+  path: '/',
+  httpOnly: true,
+  secure: import.meta.env.PROD,
+  sameSite: 'strict',
+  maxAge: 60 * 15 // 15 минут
+});
+---
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Вход в админ панель</title>
+  <script is:inline>
+    (function() {
+      const theme = localStorage.getItem('theme') || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    })();
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f9fafb;
+      padding: 1rem;
+    }
+    .dark body { background: #222831; }
+    .card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+      width: 100%;
+      max-width: 400px;
+    }
+    .dark .card { background: #393E46; }
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+    .dark h1 { color: #fff; }
+    .subtitle {
+      color: #6b7280;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .dark .subtitle { color: #9ca3af; }
+    label {
+      display: block;
+      color: #374151;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+    .dark label { color: #d1d5db; }
+    input[type="password"] {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      background: #f9fafb;
+      color: #111827;
+      margin-bottom: 1.5rem;
+    }
+    .dark input[type="password"] {
+      background: #222831;
+      border-color: #4b5563;
+      color: #fff;
+    }
+    input:focus {
+      outline: none;
+      border-color: #00ADB5;
+    }
+    button {
+      width: 100%;
+      padding: 0.875rem;
+      background: #00ADB5;
+      color: white;
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #009ca3; }
+    .error {
+      background: #fef2f2;
+      color: #dc2626;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+    .dark .error {
+      background: #450a0a;
+      color: #fca5a5;
+    }
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #6b7280;
+      text-decoration: none;
+    }
+    .back:hover { color: #00ADB5; }
+    .session-info {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      text-align: center;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>🔐 Админ панель</h1>
+    <p class="subtitle">Введите пароль для входа</p>
+    
+    {error && <div class="error">{error}</div>}
+    
+    <form method="POST">
+      <input type="hidden" name="csrf_token" value={csrfToken} />
+      <label for="password">Пароль</label>
+      <input type="password" id="password" name="password" required autofocus placeholder="••••••••" />
+      <button type="submit">Войти</button>
+    </form>
+    
+    <p class="session-info">Сессия действует {SESSION_CONFIG.maxAge / 3600} часов</p>
+    <a href="/" class="back">← На главную</a>
+  </div>
+</body>
+</html>

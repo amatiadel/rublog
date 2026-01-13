@@ -1,0 +1,11 @@
+---
+export const prerender = false;
+
+import { SESSION_CONFIG } from '@/utils/auth';
+
+// Удаляем все куки сессии
+Astro.cookies.delete(SESSION_CONFIG.cookieName, { path: '/' });
+Astro.cookies.delete(SESSION_CONFIG.csrfCookieName, { path: '/' });
+
+return Astro.redirect('/admin/login');
+---

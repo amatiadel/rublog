@@ -1,0 +1,68 @@
+# ТехБлог - Russian Tech Blog
+
+> A high-performance, SEO-optimized Russian tech blog covering AI, web development, and emerging technologies.
+
+## Site Information
+- Name: ТехБлог
+- URL: https://example.com
+- Language: Russian (ru-RU)
+- Topics: Artificial Intelligence, Web Development, Technology Trends, Programming
+- Author: Админ
+
+## Content Structure
+- /blog/ - All blog posts (Markdown content with rich frontmatter)
+- /tags/ - Posts organized by tags
+- /rss.xml - Standard RSS 2.0 feed
+- /turbo.xml - Yandex Turbo Pages feed
+- /sitemap-index.xml - XML Sitemap
+
+## Key Content Areas
+- AI and Machine Learning tutorials and trends
+- Web development best practices (Astro, TypeScript, Tailwind)
+- Technology news and analysis
+- Programming guides and tips
+- Neural network and generative AI guides
+- Prompt engineering tutorials
+
+## Content Format
+Each blog post includes:
+- Title and description (Russian)
+- Publication date
+- Author attribution
+- Featured image
+- Tags for categorization
+- Optional TL;DR summary for quick reading
+- Optional entity links (Wikidata/Wikipedia) for semantic context
+
+## Technical Implementation
+- Framework: Astro 4.x (Static Site Generation)
+- Styling: Tailwind CSS 3.x
+- Content: Markdown with YAML frontmatter
+- Schema.org: WebSite, Organization, BreadcrumbList, BlogPosting, FAQPage
+
+## Structured Data
+This site implements rich structured data:
+- WebSite schema with site name and URL
+- Organization schema with social links
+- BreadcrumbList for navigation context
+- BlogPosting for articles with author, dates, and keywords
+- FAQPage for frequently asked questions
+
+## API Endpoints (Internal Use Only)
+- /api/* - Internal API routes (not for crawling)
+- /admin/* - Admin panel (authentication required)
+
+## Crawling Guidelines
+- All blog content at /blog/* is freely accessible
+- No authentication required for public content
+- Content updated multiple times per week
+- Sitemap: /sitemap-index.xml
+- RSS Feed: /rss.xml
+- No crawl rate restrictions
+
+## Contact
+- Telegram: @techblog_channel
+- Website contact form available
+
+## License
+Content is copyrighted. Please contact for republishing permissions.

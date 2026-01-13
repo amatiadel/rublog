@@ -1,0 +1,104 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import { siteConfig } from '@/data/siteConfig';
+---
+
+<BaseLayout title="Политика конфиденциальности" description="Политика конфиденциальности ТехБлога — как мы собираем и используем ваши данные">
+  <section class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-8">Политика конфиденциальности</h1>
+    
+    <p class="text-gray-500 dark:text-gray-400 mb-8">
+      Последнее обновление: {new Date().toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' })}
+    </p>
+
+    <div class="prose prose-lg dark:prose-invert max-w-none space-y-8">
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">1. Общие положения</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Настоящая Политика конфиденциальности описывает, как {siteConfig.name} собирает, 
+          использует и защищает информацию, которую вы предоставляете при использовании нашего сайта.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">2. Какую информацию мы собираем</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">Мы можем собирать следующую информацию:</p>
+        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+          <li>Техническая информация (IP-адрес, тип браузера, операционная система)</li>
+          <li>Данные о посещении страниц и взаимодействии с сайтом</li>
+          <li>Информация, которую вы добровольно предоставляете через формы обратной связи</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">3. Как мы используем информацию</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">Собранная информация используется для:</p>
+        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+          <li>Улучшения качества контента и пользовательского опыта</li>
+          <li>Анализа посещаемости и поведения пользователей</li>
+          <li>Ответов на ваши запросы и обращения</li>
+          <li>Обеспечения безопасности сайта</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">4. Файлы cookie</h2>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">
+          Наш сайт использует файлы cookie для:
+        </p>
+        <ul class="list-disc list-inside text-gray-600 dark:text-gray-300 space-y-2">
+          <li>Сохранения ваших предпочтений (например, темы оформления)</li>
+          <li>Сбора анонимной статистики посещений</li>
+          <li>Обеспечения корректной работы сайта</li>
+        </ul>
+        <p class="text-gray-600 dark:text-gray-300 mt-4">
+          Вы можете отключить cookie в настройках вашего браузера, однако это может повлиять 
+          на функциональность сайта.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">5. Аналитика</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Мы используем Яндекс.Метрику для анализа посещаемости сайта. 
+          Эти сервисы собирают анонимную информацию о том, как посетители используют наш сайт. 
+          Данные используются исключительно для улучшения качества контента и пользовательского опыта.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">6. Защита данных</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Мы принимаем разумные меры для защиты вашей информации от несанкционированного доступа, 
+          изменения, раскрытия или уничтожения. Однако ни один метод передачи данных через интернет 
+          не является полностью безопасным.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">7. Сторонние ссылки</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Наш сайт может содержать ссылки на сторонние ресурсы. Мы не несём ответственности 
+          за политику конфиденциальности этих сайтов и рекомендуем ознакомиться с их правилами 
+          перед предоставлением личной информации.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">8. Изменения политики</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Мы оставляем за собой право изменять данную Политику конфиденциальности. 
+          Все изменения будут опубликованы на этой странице с указанием даты последнего обновления.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-4">9. Контакты</h2>
+        <p class="text-gray-600 dark:text-gray-300">
+          Если у вас есть вопросы относительно данной Политики конфиденциальности, 
+          вы можете связаться с нами через <a href="/contact" class="text-primary hover:underline">страницу контактов</a>.
+        </p>
+      </section>
+    </div>
+  </section>
+</BaseLayout>

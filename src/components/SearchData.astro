@@ -1,0 +1,17 @@
+---
+import { getCollection } from 'astro:content';
+
+const posts = await getCollection('blog', ({ data }) => !data.draft);
+---
+
+<div id="search-data" class="hidden">
+  {posts.map(post => (
+    <div 
+      data-search-post
+      data-title={post.data.title}
+      data-description={post.data.description}
+      data-slug={post.slug}
+      data-tags={post.data.tags.join(', ')}
+    />
+  ))}
+</div>

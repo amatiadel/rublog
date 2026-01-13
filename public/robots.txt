@@ -1,0 +1,28 @@
+# Robots.txt for ТехБлог
+
+User-agent: *
+Allow: /
+
+# Block admin and API routes
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemaps
+Sitemap: https://example.com/sitemap-index.xml
+
+# Yandex Turbo Pages
+Host: https://example.com
+
+# Yandex specific
+User-agent: Yandex
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+Clean-param: utm_source&utm_medium&utm_campaign
+
+# Google specific
+User-agent: Googlebot
+Allow: /
+
+# Crawl delay for bots (optional, be careful)
+# Crawl-delay: 1

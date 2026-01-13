@@ -1,0 +1,43 @@
+---
+import { siteConfig } from '@/data/siteConfig';
+
+interface Props {
+  title?: string;
+}
+
+const { title } = Astro.props;
+const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
+
+const breadcrumbItems = [
+  { name: 'Главная', url: '/' }
+];
+
+let currentPath = '';
+pathSegments.forEach((segment, index) => {
+  currentPath += `/${segment}`;
+  const isLast = index === pathSegments.length - 1;
+  const name = isLast && title 
+    ? title 
+    : segment === 'blog' 
+      ? 'Блог' 
+      : segment === 'tags'
+        ? 'Теги'
+        : decodeURIComponent(segment).replace(/-/g, ' ');
+  breadcrumbItems.push({ name, url: currentPath });
+});
+---
+
+<nav aria-label="Breadcrumb" class="text-sm text-gray-500 dark:text-gray-400 mb-4">
+  <ol class="flex flex-wrap items-center gap-1">
+    {breadcrumbItems.map((item, index) => (
+      <li class="flex items-center">
+        {index > 0 && <span class="mx-2">/</span>}
+        {index === breadcrumbItems.length - 1 ? (
+          <span class="text-gray-700 dark:text-gray-200 truncate max-w-[200px]">{item.name}</span>
+        ) : (
+          <a href={item.url} class="hover:text-primary transition-colors">{item.name}</a>
+        )}
+      </li>
+    ))}
+  </ol>
+</nav>

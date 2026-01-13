@@ -1,0 +1,23 @@
+{
+  "name": "ТехБлог",
+  "short_name": "ТехБлог",
+  "description": "Блог о технологиях, искусственном интеллекте и программировании",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#00ADB5",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/og_image.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

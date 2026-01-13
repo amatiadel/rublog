@@ -1,0 +1,138 @@
+---
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import SEO from '@/components/SEO.astro';
+import SearchData from '@/components/SearchData.astro';
+import SearchModal from '@/components/SearchModal.astro';
+import YandexMetrica from '@/components/YandexMetrica.astro';
+import { siteConfig } from '@/data/siteConfig';
+
+interface Props {
+  title: string;
+  description: string;
+  image?: string;
+  article?: boolean;
+  publishedTime?: Date;
+  updatedTime?: Date;
+  author?: string;
+  tags?: string[];
+}
+
+const { title, description, image, article, publishedTime, updatedTime, author, tags } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={siteConfig.lang}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#00ADB5" />
+  <!-- Preconnect for performance -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://images.unsplash.com" />
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href="/rss.xml" />
+  <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} Turbo`} href="/turbo.xml" />
+  <title>{title} | {siteConfig.name}</title>
+  <SEO title={title} description={description} image={image} article={article} publishedTime={publishedTime} updatedTime={updatedTime} author={author} tags={tags} />
+  <script is:inline>
+    // Prevent flash - apply theme before render
+    (function() {
+      const theme = localStorage.getItem('theme') || 
+        (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      if (theme === 'dark') document.documentElement.classList.add('dark');
+    })();
+  </script>
+</head>
+<body class="bg-white dark:bg-dark-bg text-gray-900 dark:text-gray-100 min-h-screen flex flex-col antialiased transition-colors duration-300">
+  <!-- Skip to content link for accessibility -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-[200] focus:px-4 focus:py-2 focus:bg-primary focus:text-white focus:rounded-lg focus:outline-none">
+    Перейти к содержимому
+  </a>
+  <SearchData />
+  <Header />
+  <main id="main-content" class="flex-1">
+    <slot />
+  </main>
+  <Footer />
+  
+  <!-- Scroll to Top Button -->
+  <button 
+    id="scroll-to-top"
+    class="fixed bottom-6 right-6 z-50 p-3 bg-primary text-white rounded-full shadow-lg opacity-0 invisible transition-all duration-300 hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+    aria-label="Прокрутить наверх"
+  >
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+    </svg>
+  </button>
+  
+  <SearchModal />
+  {siteConfig.yandexMetricaId && siteConfig.yandexMetricaId !== 'YOUR_METRICA_ID' && (
+    <YandexMetrica counterId={siteConfig.yandexMetricaId} />
+  )}
+  <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // @ts-ignore
+      if (window.twemoji) {
+        // @ts-ignore
+        window.twemoji.parse(document.body, {
+          folder: 'svg',
+          ext: '.svg'
+        });
+      }
+      
+      // Scroll to top button
+      const scrollBtn = document.getElementById('scroll-to-top');
+      if (scrollBtn) {
+        window.addEventListener('scroll', () => {
+          if (window.scrollY > 400) {
+            scrollBtn.classList.remove('opacity-0', 'invisible');
+            scrollBtn.classList.add('opacity-100', 'visible');
+          } else {
+            scrollBtn.classList.add('opacity-0', 'invisible');
+            scrollBtn.classList.remove('opacity-100', 'visible');
+          }
+        });
+        
+        scrollBtn.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
+
+<style is:global>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap');
+  body { font-family: 'Nunito', sans-serif; }
+  .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  img.emoji {
+    height: 1.2em;
+    width: 1.2em;
+    margin: 0 0.15em;
+    vertical-align: -0.15em;
+    display: inline !important;
+  }
+  
+  blockquote img.emoji,
+  p img.emoji,
+  li img.emoji {
+    display: inline !important;
+  }
+  
+  /* Search open blur effect */
+  body.search-open > header,
+  body.search-open > main,
+  body.search-open > footer,
+  body.search-open > #search-data {
+    filter: blur(8px);
+    pointer-events: none;
+    transition: filter 0.2s ease;
+  }
+</style>

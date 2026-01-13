@@ -1,0 +1,152 @@
+---
+---
+
+<!-- Search Modal - placed outside header to avoid blur -->
+<div id="search-modal" class="hidden fixed top-0 left-0 right-0 bottom-0 z-[100] flex items-center justify-center p-4 box-border" role="dialog" aria-modal="true" aria-labelledby="search-modal-title">
+  <div class="w-full max-w-2xl relative z-10">
+    <div class="bg-white dark:bg-dark-card rounded-2xl shadow-2xl overflow-hidden">
+      <div class="flex items-center gap-3 p-4 border-b border-gray-200 dark:border-dark-border">
+        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        <!-- Loading indicator -->
+        <svg id="search-loading" class="hidden w-5 h-5 text-primary animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <label for="search-input" id="search-modal-title" class="sr-only">Поиск статей</label>
+        <input 
+          type="text" 
+          id="search-input"
+          placeholder="Поиск статей..."
+          class="flex-1 bg-transparent text-gray-900 dark:text-white placeholder-gray-400 outline-none text-lg"
+          autocomplete="off"
+          aria-describedby="search-hint"
+        />
+        <button id="search-close" class="p-1 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200" aria-label="Закрыть поиск">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div id="search-results" class="max-h-96 overflow-y-auto" role="listbox" aria-live="polite">
+        <div id="search-hint" class="p-4 text-center text-gray-500 dark:text-gray-400">
+          Начните вводить для поиска...
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Search functionality
+  const searchToggle = document.getElementById('search-toggle');
+  const searchModal = document.getElementById('search-modal');
+  const searchClose = document.getElementById('search-close');
+  const searchInput = document.getElementById('search-input') as HTMLInputElement;
+  const searchResults = document.getElementById('search-results');
+  const searchLoading = document.getElementById('search-loading');
+  const searchIcon = searchLoading?.previousElementSibling;
+
+  // Posts data for search
+  const posts = Array.from(document.querySelectorAll('[data-search-post]')).map(el => ({
+    title: el.getAttribute('data-title') || '',
+    description: el.getAttribute('data-description') || '',
+    slug: el.getAttribute('data-slug') || '',
+    tags: el.getAttribute('data-tags') || ''
+  }));
+
+  let searchTimeout: ReturnType<typeof setTimeout>;
+
+  function showLoading() {
+    searchIcon?.classList.add('hidden');
+    searchLoading?.classList.remove('hidden');
+  }
+
+  function hideLoading() {
+    searchLoading?.classList.add('hidden');
+    searchIcon?.classList.remove('hidden');
+  }
+
+  function openSearch() {
+    searchModal?.classList.remove('hidden');
+    searchInput?.focus();
+    document.documentElement.style.overflow = 'hidden';
+    document.body.style.overflow = 'hidden';
+    document.body.classList.add('search-open');
+  }
+
+  function closeSearch() {
+    searchModal?.classList.add('hidden');
+    document.documentElement.style.overflow = '';
+    document.body.style.overflow = '';
+    document.body.classList.remove('search-open');
+    if (searchInput) searchInput.value = '';
+    renderResults([]);
+    hideLoading();
+  }
+
+  function renderResults(results: typeof posts) {
+    if (!searchResults) return;
+    
+    if (results.length === 0) {
+      const query = searchInput?.value || '';
+      searchResults.innerHTML = `
+        <div class="p-4 text-center text-gray-500 dark:text-gray-400">
+          ${query ? 'Ничего не найдено' : 'Начните вводить для поиска...'}
+        </div>
+      `;
+      return;
+    }
+
+    searchResults.innerHTML = results.map(post => `
+      <a href="/blog/${post.slug}" class="block p-4 hover:bg-gray-50 dark:hover:bg-dark-border/50 transition-colors border-b border-gray-100 dark:border-dark-border last:border-0" role="option">
+        <h3 class="font-medium text-gray-900 dark:text-white mb-1">${post.title}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">${post.description}</p>
+      </a>
+    `).join('');
+  }
+
+  function search(query: string) {
+    if (!query.trim()) {
+      renderResults([]);
+      hideLoading();
+      return;
+    }
+    
+    const q = query.toLowerCase();
+    const results = posts.filter(post => 
+      post.title.toLowerCase().includes(q) ||
+      post.description.toLowerCase().includes(q) ||
+      post.tags.toLowerCase().includes(q)
+    );
+    renderResults(results);
+    hideLoading();
+  }
+
+  searchToggle?.addEventListener('click', openSearch);
+  searchClose?.addEventListener('click', closeSearch);
+  searchModal?.addEventListener('click', (e) => {
+    if (e.target === searchModal) closeSearch();
+  });
+  searchInput?.addEventListener('input', (e) => {
+    const value = (e.target as HTMLInputElement).value;
+    if (value.trim()) {
+      showLoading();
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => search(value), 150);
+    } else {
+      hideLoading();
+      search(value);
+    }
+  });
+
+  // Keyboard shortcuts
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSearch();
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+      e.preventDefault();
+      openSearch();
+    }
+  });
+</script>

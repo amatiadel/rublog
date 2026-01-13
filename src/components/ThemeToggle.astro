@@ -1,0 +1,95 @@
+---
+// Zero JS by default - only inline script for theme toggle
+---
+
+<button
+  id="theme-toggle"
+  type="button"
+  aria-label="Переключить тему оформления"
+  aria-pressed="false"
+  class="theme-toggle"
+  role="switch"
+>
+  <span class="toggle-thumb" aria-hidden="true">
+    <span class="glow"></span>
+  </span>
+</button>
+
+<style>
+  .theme-toggle {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    width: 2.75rem;
+    height: 1.5rem;
+    border-radius: 9999px;
+    background-color: #e5e7eb;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  :global(.dark) .theme-toggle {
+    background-color: #1f2937;
+  }
+
+  .toggle-thumb {
+    position: absolute;
+    display: inline-block;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 9999px;
+    background-color: #111827;
+    transform: translateX(0.25rem);
+    transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55),
+                background-color 0.3s ease;
+  }
+
+  :global(.dark) .toggle-thumb {
+    transform: translateX(1.25rem);
+    background-color: #fde047;
+  }
+
+  .glow {
+    position: absolute;
+    inset: 0;
+    border-radius: 9999px;
+    opacity: 0;
+    background-color: #eab308;
+    filter: blur(8px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    transform: scale(0);
+  }
+
+  :global(.dark) .glow {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+</style>
+
+<script is:inline>
+  const toggle = document.getElementById('theme-toggle');
+  const html = document.documentElement;
+  
+  // Check saved preference or system preference
+  const getTheme = () => {
+    if (localStorage.getItem('theme')) {
+      return localStorage.getItem('theme');
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
+
+  // Apply theme on load
+  const isDark = getTheme() === 'dark';
+  if (isDark) {
+    html.classList.add('dark');
+  }
+  toggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+
+  toggle.addEventListener('click', () => {
+    html.classList.toggle('dark');
+    const nowDark = html.classList.contains('dark');
+    localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+    toggle.setAttribute('aria-pressed', nowDark ? 'true' : 'false');
+  });
+</script>

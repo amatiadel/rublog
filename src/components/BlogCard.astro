@@ -1,0 +1,37 @@
+---
+interface Props {
+  title: string;
+  description: string;
+  pubDate: Date;
+  slug: string;
+  image?: string;
+  tags: string[];
+}
+
+const { title, description, pubDate, slug, image, tags } = Astro.props;
+const formattedDate = pubDate.toLocaleDateString('ru-RU', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+
+<article class="group bg-gray-50 dark:bg-dark-card rounded-xl border border-gray-200 dark:border-dark-border overflow-hidden hover:border-primary/50 transition-all duration-300">
+  {image && (
+    <a href={`/blog/${slug}`} class="block aspect-video overflow-hidden">
+      <img src={image} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+    </a>
+  )}
+  <div class="p-5">
+    <div class="flex flex-wrap gap-2 mb-3">
+      {tags.slice(0, 3).map(tag => (
+        <a href={`/tags/${tag}`} class="text-xs px-2 py-1 bg-primary/20 text-primary rounded-full hover:bg-primary/30 transition-colors">
+          #{tag}
+        </a>
+      ))}
+    </div>
+    <a href={`/blog/${slug}`}>
+      <h2 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary transition-colors line-clamp-2">
+        {title}
+      </h2>
+    </a>
+    <p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">{description}</p>
+    <time class="text-xs text-gray-500">{formattedDate}</time>
+  </div>
+</article>
