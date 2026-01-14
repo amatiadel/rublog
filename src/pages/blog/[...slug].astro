@@ -253,26 +253,80 @@ const summary = post.data.summary || post.data.tldr;
       });
     }
 
-    // Copy button for code blocks
+    // Copy button and collapse for code blocks
     document.querySelectorAll('.article-content pre').forEach((pre) => {
-      const btn = document.createElement('button');
-      btn.className = 'copy-btn';
-      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Копировать`;
+      const code = pre.querySelector('code');
+      if (!code) return;
       
-      btn.addEventListener('click', async () => {
-        const code = pre.querySelector('code');
-        if (code) {
-          await navigator.clipboard.writeText(code.textContent || '');
-          btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>Скопировано!`;
-          btn.classList.add('copied');
-          setTimeout(() => {
-            btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Копировать`;
-            btn.classList.remove('copied');
-          }, 2000);
+      // Count characters
+      const charCount = code.textContent?.length || 0;
+      const charLimit = 300;
+      
+      // Add copy button
+      const copyBtn = document.createElement('button');
+      copyBtn.className = 'copy-btn';
+      copyBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Копировать`;
+      
+      // Copy button handler with fallback
+      copyBtn.onclick = async function(e) {
+        e.stopPropagation();
+        e.preventDefault();
+        
+        const text = code.textContent || '';
+        let success = false;
+        
+        try {
+          // Try modern clipboard API first
+          if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(text);
+            success = true;
+          } else {
+            // Fallback for older browsers or non-HTTPS
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+              success = document.execCommand('copy');
+            } catch (err) {
+              console.error('execCommand failed:', err);
+            }
+            
+            document.body.removeChild(textArea);
+          }
+          
+          if (!success) {
+            throw new Error('Copy failed');
+          }
+        } catch (err) {
+          console.error('Copy failed:', err);
+          alert('Не удалось скопировать. Попробуйте выделить текст вручную.');
         }
-      });
+        return false;
+      };
       
-      pre.appendChild(btn);
+      pre.appendChild(copyBtn);
+      
+      // Add collapse functionality if more than character limit
+      if (charCount > charLimit) {
+        pre.classList.add('collapsible');
+        code.classList.add('collapsed');
+        
+        // Make code area clickable but not the button
+        code.style.cursor = 'pointer';
+        
+        // Only toggle when clicking the code itself
+        code.addEventListener('click', (e) => {
+          if (e.target === code || code.contains(e.target)) {
+            code.classList.toggle('collapsed');
+          }
+        });
+      }
     });
 
     // Expand tags
@@ -429,6 +483,20 @@ const summary = post.data.summary || post.data.tldr;
     display: inline;
   }
   
+  .article-content h1 {
+    color: #111827;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 2px solid #00ADB5;
+  }
+  
+  .dark .article-content h1 {
+    color: #EEEEEE;
+  }
+  
   .article-content blockquote img.emoji {
     display: inline !important;
     vertical-align: -0.15em;
@@ -450,11 +518,33 @@ const summary = post.data.summary || post.data.tldr;
     position: relative;
     background: #ffffff !important;
     padding: 1.5rem;
-    padding-top: 2.5rem;
     border-radius: 0.75rem;
     margin: 1.5rem 0;
     border: 1px solid #000000;
     overflow-x: hidden;
+  }
+  
+  /* Collapsed code block */
+  .article-content pre.collapsible code.collapsed {
+    max-height: 7.5em; /* ~5 lines */
+    overflow: hidden;
+    display: block;
+    position: relative;
+  }
+  
+  .article-content pre.collapsible code.collapsed::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3em;
+    background: linear-gradient(to bottom, transparent, #ffffff);
+    pointer-events: none;
+  }
+  
+  .dark .article-content pre.collapsible code.collapsed::after {
+    background: linear-gradient(to bottom, transparent, #000000);
   }
   
   /* Shiki dual theme support */
@@ -503,6 +593,7 @@ const summary = post.data.summary || post.data.tldr;
     align-items: center;
     gap: 0.35rem;
     opacity: 0;
+    z-index: 100;
   }
   
   .article-content pre:hover .copy-btn {
@@ -556,6 +647,107 @@ const summary = post.data.summary || post.data.tldr;
     border-radius: 0;
     margin: 0 0.15em;
     display: inline !important;
+  }
+  
+  /* Table Styles - Clean Design */
+  .article-content table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    margin: 2rem 0;
+    font-size: 0.9rem;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .dark .article-content table {
+    border-color: #393E46;
+  }
+  
+  .article-content thead {
+    background: #ffffff;
+  }
+  
+  .dark .article-content thead {
+    background: #000000;
+  }
+  
+  .article-content th {
+    padding: 1rem 1.25rem;
+    text-align: left;
+    font-weight: 600;
+    color: #111827;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+    border-bottom: 2px solid #00ADB5;
+  }
+  
+  .dark .article-content th {
+    color: #EEEEEE;
+  }
+  
+  .article-content th:first-child {
+    border-top-left-radius: 11px;
+  }
+  
+  .article-content th:last-child {
+    border-top-right-radius: 11px;
+  }
+  
+  .article-content tbody {
+    background: #ffffff;
+  }
+  
+  .dark .article-content tbody {
+    background: #000000;
+  }
+  
+  .article-content td {
+    padding: 1rem 1.25rem;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: middle;
+  }
+  
+  .dark .article-content td {
+    border-bottom-color: #393E46;
+    color: #EEEEEE;
+  }
+  
+  .article-content tbody tr {
+    transition: background-color 0.15s ease;
+  }
+  
+  .article-content tbody tr:hover {
+    background: #f3f4f6;
+  }
+  
+  .dark .article-content tbody tr:hover {
+    background: #1a1a1a;
+  }
+  
+  .article-content tbody tr:last-child td {
+    border-bottom: none;
+  }
+  
+  .article-content tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 11px;
+  }
+  
+  .article-content tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 11px;
+  }
+  
+  /* Responsive table wrapper */
+  @media (max-width: 640px) {
+    .article-content table {
+      display: block;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
   }
   
   .line-clamp-2 {

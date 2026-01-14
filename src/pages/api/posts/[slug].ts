@@ -19,7 +19,7 @@ export const GET: APIRoute = async ({ params }) => {
     }
 
     const fileContent = await readFile(filePath, 'utf-8');
-    const frontmatterMatch = fileContent.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+    const frontmatterMatch = fileContent.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n([\s\S]*)$/);
 
     if (!frontmatterMatch) {
       return new Response(JSON.stringify({ error: 'Неверный формат файла' }), {
