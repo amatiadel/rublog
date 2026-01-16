@@ -6,10 +6,17 @@ import vercel from '@astrojs/vercel/serverless';
 export default defineConfig({
   site: 'https://texblog.ru/',
   output: 'hybrid',
-  adapter: vercel(),
+  adapter: vercel({
+    imageService: true
+  }),
   integrations: [tailwind(), sitemap()],
   trailingSlash: 'never',
   compressHTML: true,
+  image: {
+    service: {
+      entrypoint: 'astro/assets/services/sharp'
+    }
+  },
   markdown: {
     shikiConfig: {
       themes: {

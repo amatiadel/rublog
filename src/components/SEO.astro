@@ -42,7 +42,7 @@ const organizationSchema = {
   "@type": "Organization",
   "name": siteConfig.name,
   "url": siteConfig.url,
-  "logo": `${siteConfig.url}/favicon.svg`,
+  "logo": `${siteConfig.url}/logo.png`,
   "sameAs": [
     `https://t.me/${siteConfig.social.telegram}`,
     `https://github.com/${siteConfig.social.github}`,
@@ -78,7 +78,7 @@ const articleSchema = article && publishedTime ? {
     "name": siteConfig.name,
     "logo": {
       "@type": "ImageObject",
-      "url": `${siteConfig.url}/favicon.svg`
+      "url": `${siteConfig.url}/logo.png`
     }
   },
   "mainEntityOfPage": {
