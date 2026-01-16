@@ -4,7 +4,7 @@
 
 ## Site Information
 - Name: ТехБлог
-- URL: https://example.com
+- URL: https://texblog.ru/
 - Language: Russian (ru-RU)
 - Topics: Artificial Intelligence, Web Development, Technology Trends, Programming
 - Author: Админ

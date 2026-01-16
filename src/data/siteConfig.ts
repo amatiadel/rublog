@@ -1,7 +1,7 @@
 export const siteConfig = {
   name: 'ТехБлог',
   description: 'Блог о технологиях, искусственном интеллекте и программировании',
-  url: 'https://example.com',
+  url: 'https://texblog.ru/',
   author: 'Админ',
   lang: 'ru',
   social: {

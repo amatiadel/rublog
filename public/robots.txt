@@ -8,10 +8,10 @@ Disallow: /admin/
 Disallow: /api/
 
 # Sitemaps
-Sitemap: https://example.com/sitemap-index.xml
+Sitemap: https://texblog.ru/sitemap-index.xml
 
 # Yandex Turbo Pages
-Host: https://example.com
+Host: https://texblog.ru/
 
 # Yandex specific
 User-agent: Yandex

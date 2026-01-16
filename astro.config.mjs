@@ -1,12 +1,12 @@
 import { defineConfig } from 'astro/config';
 import tailwind from '@astrojs/tailwind';
 import sitemap from '@astrojs/sitemap';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel/serverless';
 
 export default defineConfig({
-  site: 'https://example.com',
+  site: 'https://texblog.ru/',
   output: 'hybrid',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   integrations: [tailwind(), sitemap()],
   trailingSlash: 'never',
   compressHTML: true,
@@ -17,9 +17,5 @@ export default defineConfig({
         dark: 'github-dark'
       }
     }
-  },
-  server: {
-    host: true,
-    port: 4321
   }
 });
