@@ -6,9 +6,7 @@ import vercel from '@astrojs/vercel/serverless';
 export default defineConfig({
   site: 'https://texblog.ru/',
   output: 'hybrid',
-  adapter: vercel({
-    runtime: 'nodejs20.x'
-  }),
+  adapter: vercel(),
   integrations: [tailwind(), sitemap()],
   trailingSlash: 'never',
   compressHTML: true,

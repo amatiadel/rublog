@@ -2,6 +2,9 @@
   "name": "astro-blog",
   "type": "module",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "dev": "astro dev --host",
     "build": "astro build",
