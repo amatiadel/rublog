@@ -15,7 +15,7 @@ const formattedDate = pubDate.toLocaleDateString('ru-RU', { year: 'numeric', mon
 <article class="group bg-gray-50 dark:bg-dark-card rounded-xl border border-gray-200 dark:border-dark-border overflow-hidden hover:border-primary/50 transition-all duration-300">
   {image && (
     <a href={`/blog/${slug}`} class="block aspect-video overflow-hidden">
-      <img src={image} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" />
+      <img src={image} alt={title} class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" loading="lazy" width="400" height="225" />
     </a>
   )}
   <div class="p-5">

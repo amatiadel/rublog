@@ -74,7 +74,7 @@ const row2Big = posts[5];
 const remaining = posts.slice(6);
 ---
 
-<BaseLayout title="Главная" description={siteConfig.description}>
+<BaseLayout title="Главная" description={siteConfig.description} image={row1Big?.data.image}>
   <section class="max-w-7xl mx-auto px-4 py-8 space-y-4">
     
     <!-- Row 1: Big Left + 2 Small Right -->
@@ -87,6 +87,10 @@ const remaining = posts.slice(6);
               src={row1Big.data.image} 
               alt={row1Big.data.title}
               class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+              loading="eager"
+              fetchpriority="high"
+              width="800"
+              height="500"
             />
           )}
           <div class="absolute bottom-0 left-0 right-0 p-8">
@@ -121,6 +125,9 @@ const remaining = posts.slice(6);
                 src={post.data.image} 
                 alt={post.data.title}
                 class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                width="400"
+                height="240"
               />
             )}
             <div class="absolute bottom-0 left-0 right-0 p-6">
@@ -151,6 +158,9 @@ const remaining = posts.slice(6);
                   src={post.data.image} 
                   alt={post.data.title}
                   class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  width="400"
+                  height="240"
                 />
               )}
               <div class="absolute bottom-0 left-0 right-0 p-6">
@@ -176,6 +186,9 @@ const remaining = posts.slice(6);
                 src={row2Big.data.image} 
                 alt={row2Big.data.title}
                 class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                width="800"
+                height="500"
               />
             )}
             <div class="absolute bottom-0 left-0 right-0 p-8">
@@ -219,7 +232,7 @@ const remaining = posts.slice(6);
               {bigPost && (
                 <a href={`/blog/${bigPost.slug}`} class="lg:col-span-2 relative group rounded-3xl overflow-hidden bg-gray-100 dark:bg-dark-card min-h-[300px]">
                   {bigPost.data.image && (
-                    <img src={bigPost.data.image} alt={bigPost.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" />
+                    <img src={bigPost.data.image} alt={bigPost.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" loading="lazy" width="800" height="500" />
                   )}
                   <div class="absolute bottom-0 left-0 right-0 p-8">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-t-3xl" style="mask-image: linear-gradient(to top, black 60%, transparent); -webkit-mask-image: linear-gradient(to top, black 60%, transparent);"></div>
@@ -233,7 +246,7 @@ const remaining = posts.slice(6);
               <div class="flex flex-col gap-4">
                 {smallPosts.map((post) => (
                   <a href={`/blog/${post.slug}`} class="relative group rounded-3xl overflow-hidden flex-1 min-h-[240px] bg-gray-100 dark:bg-dark-card">
-                    {post.data.image && <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" />}
+                    {post.data.image && <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" loading="lazy" width="400" height="240" />}
                     <div class="absolute bottom-0 left-0 right-0 p-6">
                       <div class="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-t-2xl" style="mask-image: linear-gradient(to top, black 50%, transparent); -webkit-mask-image: linear-gradient(to top, black 50%, transparent);"></div>
                       <div class="relative z-10">
@@ -250,7 +263,7 @@ const remaining = posts.slice(6);
               <div class="flex flex-col gap-4">
                 {smallPosts.map((post) => (
                   <a href={`/blog/${post.slug}`} class="relative group rounded-3xl overflow-hidden flex-1 min-h-[240px] bg-gray-100 dark:bg-dark-card">
-                    {post.data.image && <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" />}
+                    {post.data.image && <img src={post.data.image} alt={post.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" loading="lazy" width="400" height="240" />}
                     <div class="absolute bottom-0 left-0 right-0 p-6">
                       <div class="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-t-2xl" style="mask-image: linear-gradient(to top, black 50%, transparent); -webkit-mask-image: linear-gradient(to top, black 50%, transparent);"></div>
                       <div class="relative z-10">
@@ -263,7 +276,7 @@ const remaining = posts.slice(6);
               </div>
               {bigPost && (
                 <a href={`/blog/${bigPost.slug}`} class="lg:col-span-2 relative group rounded-3xl overflow-hidden bg-gray-100 dark:bg-dark-card min-h-[300px]">
-                  {bigPost.data.image && <img src={bigPost.data.image} alt={bigPost.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" />}
+                  {bigPost.data.image && <img src={bigPost.data.image} alt={bigPost.data.title} class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500" loading="lazy" width="800" height="500" />}
                   <div class="absolute bottom-0 left-0 right-0 p-8">
                     <div class="absolute inset-0 bg-black/40 backdrop-blur-xl rounded-t-3xl" style="mask-image: linear-gradient(to top, black 60%, transparent); -webkit-mask-image: linear-gradient(to top, black 60%, transparent);"></div>
                     <div class="relative z-10">

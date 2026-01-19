@@ -52,6 +52,9 @@ const { tag, posts } = Astro.props;
               src={post.data.image} 
               alt={post.data.title}
               class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+              loading="lazy"
+              width="400"
+              height="300"
             />
           )}
           <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>

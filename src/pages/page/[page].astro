@@ -38,7 +38,7 @@ const row2Big = posts[5];
 const remaining = posts.slice(6);
 ---
 
-<BaseLayout title={`Страница ${currentPage}`} description={`Страница ${currentPage} из ${totalPages} — все статьи ТехБлога`}>
+<BaseLayout title={`Страница ${currentPage}`} description={`Страница ${currentPage} из ${totalPages} — все статьи ТехБлога`} image={row1Big?.data.image}>
   <section class="max-w-7xl mx-auto px-4 py-8 space-y-4">
     
     <!-- Page Header -->
@@ -61,6 +61,10 @@ const remaining = posts.slice(6);
                 src={row1Big.data.image} 
                 alt={row1Big.data.title}
                 class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                loading="eager"
+                fetchpriority="high"
+                width="800"
+                height="500"
               />
             )}
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
@@ -92,6 +96,9 @@ const remaining = posts.slice(6);
                   src={post.data.image} 
                   alt={post.data.title}
                   class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  width="400"
+                  height="240"
                 />
               )}
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -120,6 +127,9 @@ const remaining = posts.slice(6);
                   src={post.data.image} 
                   alt={post.data.title}
                   class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                  loading="lazy"
+                  width="400"
+                  height="240"
                 />
               )}
               <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
@@ -142,6 +152,9 @@ const remaining = posts.slice(6);
                 src={row2Big.data.image} 
                 alt={row2Big.data.title}
                 class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                width="800"
+                height="500"
               />
             )}
             <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
@@ -177,6 +190,9 @@ const remaining = posts.slice(6);
                 src={post.data.image} 
                 alt={post.data.title}
                 class="w-full h-full object-cover absolute inset-0 group-hover:scale-105 transition-transform duration-500"
+                loading="lazy"
+                width="400"
+                height="300"
               />
             )}
             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>

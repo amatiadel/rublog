@@ -19,6 +19,9 @@ interface Props {
 }
 
 const { title, description, image, article, publishedTime, updatedTime, author, tags } = Astro.props;
+
+// Preload LCP image if provided
+const shouldPreloadImage = image && !article; // Preload on homepage/listing pages, not article pages (they use fetchpriority)
 ---
 
 <!DOCTYPE html>
@@ -36,6 +39,9 @@ const { title, description, image, article, publishedTime, updatedTime, author, 
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link rel="preconnect" href="https://images.unsplash.com" />
   <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  {shouldPreloadImage && (
+    <link rel="preload" as="image" href={image} fetchpriority="high" />
+  )}
   <link rel="alternate" type="application/rss+xml" title={siteConfig.name} href="/rss.xml" />
   <link rel="alternate" type="application/rss+xml" title={`${siteConfig.name} Turbo`} href="/turbo.xml" />
   <title>{title} | {siteConfig.name}</title>
@@ -77,7 +83,7 @@ const { title, description, image, article, publishedTime, updatedTime, author, 
     <YandexMetrica counterId={siteConfig.yandexMetricaId} />
   )}
   <script defer src="https://analytics.promptlibrary.space/script.js" data-website-id="02378863-3af0-4e11-a6a4-1116855c8142"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@twemoji/api@latest/dist/twemoji.min.js" crossorigin="anonymous"></script>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       // @ts-ignore

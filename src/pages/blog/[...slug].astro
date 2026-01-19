@@ -89,6 +89,7 @@ const summary = post.data.summary || post.data.tldr;
             width="1200"
             height="630"
             loading="eager"
+            fetchpriority="high"
           />
         )}
         
@@ -160,7 +161,7 @@ const summary = post.data.summary || post.data.tldr;
                 {similarPosts.map(p => (
                   <a href={`/blog/${p.slug}`} class="flex gap-4 group">
                     {p.data.image && (
-                      <img src={p.data.image} alt={p.data.title} class="w-24 h-24 object-cover rounded-lg shrink-0" />
+                      <img src={p.data.image} alt={p.data.title} class="w-24 h-24 object-cover rounded-lg shrink-0" loading="lazy" width="96" height="96" />
                     )}
                     <div class="flex-1 min-w-0">
                       <h4 class="text-base font-medium text-gray-900 dark:text-white group-hover:text-primary transition-colors line-clamp-3 leading-snug">{p.data.title}</h4>
