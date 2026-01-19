@@ -3,7 +3,7 @@ title: "21 промпт для мужских фото в Nano Banana Pro"
 description: "Готовые промпты для стильных мужских фотографий в Nano Banana Pro. Полная структура: сцена, поза, одежда, освещение. Работает без VPN."
 pubDate: 2026-01-16
 author: "Адель Мокрани"
-image: "/uploads/1768569081076-963w1r.png"
+image: "/uploads/1768569081076-963w1r.webp"
 tags: ["nano banana pro", "nanobanana", "промпты для ИИ фото", "генерация мужских фото ИИ"]
 ---
 

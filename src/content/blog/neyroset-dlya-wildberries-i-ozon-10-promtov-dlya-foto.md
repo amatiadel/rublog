@@ -3,7 +3,7 @@ title: "Нейросеть для Wildberries и Ozon: 10 промтов для 
 description: "Готовые промты для Nanobanana Pro: создавайте продуктовые фото для Wildberries и Ozon без фотографа. Работает без VPN, есть бесплатные генерации,"
 pubDate: 2026-01-16
 author: "Адель Мокрани"
-image: "/uploads/1768564634964-zagvvm.png"
+image: "/uploads/1768564634964-zagvvm.webp"
 tags: ["нейросеть для wildberries", "nanobanana pro", "промты для фото товаров", "фото для ozon без фотографа"]
 ---
 
