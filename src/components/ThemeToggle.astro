@@ -6,9 +6,10 @@
   id="theme-toggle"
   type="button"
   aria-label="Переключить тему оформления"
-  aria-pressed="false"
+  aria-checked="false"
   class="theme-toggle"
   role="switch"
+  data-astro-cid-x3pjskd3
 >
   <span class="toggle-thumb" aria-hidden="true">
     <span class="glow"></span>
@@ -84,12 +85,12 @@
   if (isDark) {
     html.classList.add('dark');
   }
-  toggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+  toggle.setAttribute('aria-checked', isDark ? 'true' : 'false');
 
   toggle.addEventListener('click', () => {
     html.classList.toggle('dark');
     const nowDark = html.classList.contains('dark');
     localStorage.setItem('theme', nowDark ? 'dark' : 'light');
-    toggle.setAttribute('aria-pressed', nowDark ? 'true' : 'false');
+    toggle.setAttribute('aria-checked', nowDark ? 'true' : 'false');
   });
 </script>
