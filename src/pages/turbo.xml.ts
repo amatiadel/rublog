@@ -2,6 +2,8 @@ import type { APIRoute } from 'astro';
 import { getCollection, type CollectionEntry } from 'astro:content';
 import { siteConfig } from '@/data/siteConfig';
 
+export const prerender = true;
+
 export const GET: APIRoute = async () => {
   const posts = await getCollection('blog', ({ data }: CollectionEntry<'blog'>) => !data.draft);
   const sortedPosts = posts.sort((a: CollectionEntry<'blog'>, b: CollectionEntry<'blog'>) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
